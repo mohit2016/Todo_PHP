@@ -1,15 +1,16 @@
 <?php  include('server.php'); ?>
+
 <!-- Edit  -->
 <?php 
 	if (isset($_GET['edit'])) {
 		$id = $_GET['edit'];
 		$update = true;
-		$record = mysqli_query($db, "SELECT * FROM info WHERE id=$id");
-
+		$record = mysqli_query($db, "SELECT * FROM tasks WHERE id=$id");
 		
 			$n = mysqli_fetch_array($record);
 			$title = $n['title'];
-			$description = $n['description'];
+            $description = $n['description'];
+            $date = $n['date'];
 		
 	}
 ?>
@@ -57,6 +58,12 @@
 	<input type="text" class="form-control" name="description" required="required"  value="<?php echo $description; ?>">
     </div>
   </div>
+  <div class="form-group">
+    <label class="control-label col-sm-2" >Date:</label>
+    <div class="col-sm-10"> 
+	<input type="date" class="form-control" name="date" required="required"  value="<?php echo $date; ?>">
+    </div>
+  </div>
   <div class="form-group"> 
     <div class="col-sm-offset-2 col-sm-10">
 			      <?php if ($update == true): ?>
@@ -70,19 +77,11 @@
 
 
 
+    <!-- get all the data from the table-->
+    <?php $results = mysqli_query($db, "SELECT * FROM tasks"); ?>
 
 
-
-
-
-
-
-    <?php $results = mysqli_query($db, "SELECT * FROM info"); ?>
-
-
-
-
-
+<!--Display data-->
 
 <div class="panel-group ">
     <div class="panel panel-primary">
@@ -98,18 +97,20 @@
                       <tr>
                         <th>Task Name</th>
                         <th>Task Description</th>
+                        <th>Task Date</th>
                         <th>Action</th>
                         
                       </tr>
                     </thead>
                     <tbody>
                       
-					  
+					  <!-- display data row wise -->
 					<?php while ($row = mysqli_fetch_array($results)) { ?>
 						<tr>
 							<td><b><?php echo $row['title']; ?></b></td>
 							<td><?php echo $row['description']; ?></td>
-							<td>
+							<td><?php echo $row['date']; ?></td>
+                            <td>
 								<a href="index.php?edit=<?php echo $row['id']; ?>" class="btn btn-warning btn-xs" >Edit</a>
 						
 								<a href="server.php?del=<?php echo $row['id']; ?>" class="btn btn-danger btn-xs">Delete</a>
